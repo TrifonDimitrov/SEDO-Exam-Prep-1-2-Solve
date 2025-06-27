@@ -40,10 +40,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            junit '**/TestResults/*.xml' // ако имаш тестови резултати
-        }
-    }
 }
