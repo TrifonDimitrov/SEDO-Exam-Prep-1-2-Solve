@@ -1,14 +1,16 @@
 pipeline {
     agent any
 
-
     stages {
         stage('Check Branch') {
             when {
                 anyOf {
                     branch 'main'
-                    branch pattern: 'feature/**'
+                    branch pattern: 'feature/.*', comparator: 'REGEXP'
                 }
+            }
+            steps {
+                echo "Branch '${env.BRANCH_NAME}' matches the criteria. Proceeding with build..."
             }
         }
 
