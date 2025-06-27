@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     triggers {
-        // Автоматичен build при push (работи при включен SCM polling в Jenkins)
-        pollSCM('* * * * *')  // проверява всяка минута
+        pollSCM('* * * * *')  
     }
 
     environment {
