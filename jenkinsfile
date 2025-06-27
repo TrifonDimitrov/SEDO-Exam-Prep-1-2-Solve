@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+
+    triggers {
+        // Автоматичен build при push (работи при включен SCM polling в Jenkins)
+        pollSCM('* * * * *')  // проверява всяка минута
+    }
+
+    environment {
+        DOTNET_CLI_TELEMETRY_OPTOUT = '1'
+    }
+
+    stages {
+        stage('Check Branch') {
+            when {
+                anyOf {
+                    branch 'main'
+                    branch pattern: "feature/.*", comparator: "REGEXP"
+                }
+            }
+            steps {
+                echo "Building branch: ${env.BRANCH_NAME}"
+            }
+        }
+
+        stage('Restore') {
+            steps {
+                sh 'dotnet restore'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'dotnet build --no-restore --configuration Release'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'dotnet test --no-build --verbosity normal'
+            }
+        }
+    }
+
+    post {
+        always {
+            junit '**/TestResults/*.xml' // ако имаш тестови резултати
+        }
+    }
+}
