@@ -14,7 +14,7 @@ pipeline {
             when {
                 anyOf {
                     branch 'main'
-                    branch pattern: "feature/.*", comparator: "REGEXP"
+                    branch 'feature/**'
                 }
             }
             steps {
